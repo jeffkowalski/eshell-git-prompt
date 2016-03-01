@@ -111,10 +111,15 @@ For example:
   \"~/foo/bar\" => \"bar\"
   \"~\" => \"~\"
   \"/\" => \"/\""
-  (let ((dir (abbreviate-file-name directory)))
-    (if (> (length dir) 1)
-        (file-name-nondirectory (substring dir 0 -1))
-      dir)))
+  (let* ((dir (abbreviate-file-name directory))
+	 (short-dir (if (> (length dir) 1)
+			(file-name-nondirectory (substring dir 0 -1))
+		      dir)))
+    (if (tramp-tramp-file-p directory)
+	(apply 'format "%s [%s://%s@%s]"
+	       (with-parsed-tramp-file-name directory nil
+		 (list short-dir method user host)))
+      short-dir)))
 
 (defun eshell-git-prompt--slash-str (str)
   "Make sure STR is ended with one slash, return it."
