@@ -118,7 +118,7 @@ For example:
     (if (tramp-tramp-file-p directory)
 	(apply 'format "%s [%s://%s@%s]"
 	       (with-parsed-tramp-file-name directory nil
-		 (list short-dir method user host)))
+		 (list short-dir method (if user user "") host)))
       short-dir)))
 
 (defun eshell-git-prompt--slash-str (str)
